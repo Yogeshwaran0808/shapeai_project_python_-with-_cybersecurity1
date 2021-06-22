@@ -1,0 +1,36 @@
+import requests
+import json
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather?"
+CITY = input("Enter The City Name : ")
+API_KEY = "060f696beb001e3ca027a3c1bef1a4a1"
+URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
+response = requests.get(URL)
+if response.status_code == 200:
+    data = response.json()
+    main = data['main']
+    temperature = round(main['temp'] -272.15)
+    temp_feel_like = round(main['feels_like'] -272.15)
+    humidity = main['humidity']
+    weather_report = data['weather']
+    wind_report = data['wind']
+    
+
+    print(f"{CITY:-^35}")
+    print(f"Temperature: {temperature}°C")
+    print(f"Feel Like  : {temp_feel_like}°C")
+    print(f"Humidity   : {humidity}")
+    print(f"Weather Report: {weather_report[0]['description']}")
+    print(f"Wind Speed : {wind_report['speed']}KM/H")
+    print(f"Time Zone  : {data['timezone']}")
+    report = open('weather_output.txt','w')
+    report.write(f"{CITY:-^35} \n")
+    report.write(f"City ID    : {data['id']} \n")
+    report.write(f"Temperature: {temperature}°C\n")
+    report.write(f"Feel Like  : {temp_feel_like}°C\n")
+    report.write(f"Humidity   : {humidity} \n")
+    report.write(f"Weather Report: {weather_report[0]['description']} \n")
+    report.write(f"Wind Speed : {wind_report['speed']} \n")
+    report.write(f"Time Zone  : {data['timezone']} \n")
+    report.close()
+else:
+    print("Your City Is Not Found")
